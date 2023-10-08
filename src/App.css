@@ -5,3 +5,16 @@ table {
 .timeInput {
   width: 30px;
 }
+
+#outer {
+  margin: 10px;
+}
+
+#activityInput {
+  margin: 0 0 5px 0;
+  padding: 10px;
+  width: 150px;
+  background-color: rgba(0, 98, 255, 0.5);
+  border-radius: 10px;;
+  border: 0;
+}

@@ -22,7 +22,7 @@ function App() {
     const endTime = new Date();
     endTime.setHours(formValues.endHour);
     endTime.setMinutes(formValues.endMin);
-    formValues.duration = (endTime - startTime) / 60000; // convert to minutes
+    formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
     setRecords([...records, formValues]);
     setFormValues({
       activity: "",
@@ -35,15 +35,29 @@ function App() {
   };
 
   return (
-    <div>
+    <div id="outer">
 
-    <form method="post" onSubmit={handleSubmit}>
-      <input 
+    <form onSubmit={handleSubmit}>
+      <input id="activityInput"
+        list='options'
         name="activity"
         placeholder="Activity"
         value={formValues.activity}
         onChange={(e) => setFormValues({...formValues, activity: e.target.value})}
+        required autoFocus
       />
+      <datalist id='options'>
+        <option value='sleep'>sleep</option>
+        <option value='eat'>eat</option>
+        <option value='gym'>gym</option>
+        <option value='exerciseOther'>exercise (other)</option>
+        <option value='cook'>cook</option>
+        <option value='downtime'>downtime</option>
+        <option value='in class'>in class</option>
+        <option value='classwork'>classwork</option>
+        <option value='prof dev'>professional development</option>
+        <option value='social time'>social time</option>
+      </datalist>
       <br />
       <div>
         Start Time:&nbsp;
@@ -53,7 +67,8 @@ function App() {
           onChange={(e) => setFormValues({...formValues, startHour: e.target.value})
           } 
           name="startHour" 
-          pattern="\d{1,2}"/>
+          pattern="\d{1,2}"
+          required/>
           :
         <input
           className='timeInput'
@@ -61,7 +76,8 @@ function App() {
           onChange={(e) => setFormValues({...formValues, startMin: e.target.value})
           } 
           name="startMin" 
-          pattern="\d{2}"/>
+          pattern="\d{2}"
+          required/>
       </div>
       <div>End Time&nbsp;
       <input 
@@ -69,14 +85,16 @@ function App() {
         value={formValues.endHour}
         onChange={(e) => setFormValues({...formValues, endHour: e.target.value})}
         name="endHour"
-        pattern="\d{1,2}"/>
+        pattern="\d{1,2}"
+        required/>
         :
       <input 
         className='timeInput'
         value={formValues.endMin}
         onChange={(e) => setFormValues({...formValues, endMin: e.target.value})}
         name="endMin"
-        pattern="\d{2}"/>
+        pattern="\d{2}"
+        required/>
       </div>
       <button type="submit">Add activity</button>
     </form>
