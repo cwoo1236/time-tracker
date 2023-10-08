@@ -103,7 +103,7 @@ function App() {
       </div>
       <button type="submit">Add activity</button>
     </form>
-    <table border="1">
+    <table id="activitiesTable">
       <tbody>
         <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th></tr>
         {records.map((record, index) => (

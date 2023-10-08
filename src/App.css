@@ -1,5 +1,12 @@
-table {
-  border: 1px;
+#activitiesTable {
+  border: 1px solid white;
+  background-color: rgba(100, 149, 237, 0.3);
+}
+
+#activitiesTable th, #activitiesTable td {
+  border: 2px solid white;
+  padding: 5px;
+  background-color: inherit;
 }
 
 .timeInput {
