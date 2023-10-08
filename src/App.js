@@ -59,42 +59,47 @@ function App() {
         <option value='social time'>social time</option>
       </datalist>
       <br />
-      <div>
-        Start Time:&nbsp;
-        <input 
-          className='timeInput'
-          value={formValues.startHour}
-          onChange={(e) => setFormValues({...formValues, startHour: e.target.value})
-          } 
-          name="startHour" 
-          pattern="\d{1,2}"
-          required/>
-          :
-        <input
-          className='timeInput'
-          value={formValues.startMin}
-          onChange={(e) => setFormValues({...formValues, startMin: e.target.value})
-          } 
-          name="startMin" 
-          pattern="\d{2}"
-          required/>
+      <div class='timeInputRow'>
+        <p>Start Time:</p>
+        <span class='hourMin'>
+          <input 
+            className='timeInput'
+            value={formValues.startHour}
+            onChange={(e) => setFormValues({...formValues, startHour: e.target.value})
+            } 
+            name="startHour" 
+            pattern="\d{1,2}"
+            required/>
+            :
+          <input
+            className='timeInput'
+            value={formValues.startMin}
+            onChange={(e) => setFormValues({...formValues, startMin: e.target.value})
+            } 
+            name="startMin" 
+            pattern="\d{2}"
+            required/>
+          </span>
       </div>
-      <div>End Time&nbsp;
-      <input 
-        className='timeInput'
-        value={formValues.endHour}
-        onChange={(e) => setFormValues({...formValues, endHour: e.target.value})}
-        name="endHour"
-        pattern="\d{1,2}"
-        required/>
-        :
-      <input 
-        className='timeInput'
-        value={formValues.endMin}
-        onChange={(e) => setFormValues({...formValues, endMin: e.target.value})}
-        name="endMin"
-        pattern="\d{2}"
-        required/>
+      <div class='timeInputRow'>
+        <p>End Time:</p>
+        <span class='hourMin'>
+          <input 
+            className='timeInput'
+            value={formValues.endHour}
+            onChange={(e) => setFormValues({...formValues, endHour: e.target.value})}
+            name="endHour"
+            pattern="\d{1,2}"
+            required/>
+            :
+          <input 
+            className='timeInput'
+            value={formValues.endMin}
+            onChange={(e) => setFormValues({...formValues, endMin: e.target.value})}
+            name="endMin"
+            pattern="\d{2}"
+            required/>
+        </span>
       </div>
       <button type="submit">Add activity</button>
     </form>
@@ -113,7 +118,7 @@ function App() {
     </table>
     
 
-    </div>
+  </div>
   );
 }
 

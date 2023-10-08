@@ -3,7 +3,7 @@ table {
 }
 
 .timeInput {
-  width: 30px;
+  width: 20px;
 }
 
 #outer {
@@ -17,4 +17,18 @@ table {
   background-color: rgba(0, 98, 255, 0.5);
   border-radius: 10px;;
   border: 0;
+}
+
+.timeInputRow {
+  margin-bottom: 5px;
+  width: 150px;
+}
+
+.timeInputRow p {
+  display: inline;
+  margin-right: 3px;
+}
+
+.hourMin {
+  float: right;
 }
