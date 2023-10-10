@@ -12,7 +12,8 @@
 /build
 
 /public
-
+/server/mongopw
+/server/.env
 # misc
 .DS_Store
 .env.local

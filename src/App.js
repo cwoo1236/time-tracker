@@ -2,6 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 
+// const { MongoClient } = require("mongodb");
+
+// // Replace the uri string with your connection string.
+// const uri = "mongodb+srv://cwpooky:aKhfhYulVKXqf4u0@cluster0.y8rlsjk.mongodb.net/?retryWrites=true&w=majority";
+// const client = new MongoClient(uri);
+
 function App() {
   const [formValues, setFormValues] = useState({
     activity: "",
@@ -13,6 +19,20 @@ function App() {
   });
 
   const [records, setRecords] = useState([]);
+
+  // async function run() {
+  //   try {
+  //     await client.connect();
+      
+  //     const database = client.db('activityData');
+  //     const activities = database.collection('activities');
+  
+  //     const result = await activities.insertOne(formValues);
+  //     console.log(`Added new activity ${formValues.activity}`);
+  //   } finally {
+  //     await client.close();
+  //   }
+  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,6 +52,8 @@ function App() {
       endMin: "",
       duration: 0
     });
+
+    // run().catch(console.dir);
   };
 
   return (
