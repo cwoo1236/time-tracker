@@ -1,5 +1,6 @@
 {
-  "name": "my-react-website",
+  "proxy": "http://localhost:4000",
+  "name": "time-tracker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

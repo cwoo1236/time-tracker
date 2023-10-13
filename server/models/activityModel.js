@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const activitySchema = new mongoose.Schema({
-    title: {
+    activityName: {
         type: String,
         required: true
     },

@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [formValues, setFormValues] = useState({
-    activity: "",
+    activityName: "",
     startHour: "",
     startMin: "",
     endHour: "",
@@ -13,8 +13,25 @@ function App() {
   });
 
   const [records, setRecords] = useState([]);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    console.log("opened");
+
+    const fetchData = async () => {
+      const res = await fetch('/api/activities');
+      const json = await res.json();
+      console.log(json);
+
+      if (res.ok) {
+        setRecords(json);
+      }
+    }
+
+    fetchData();
+  }, [])
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const startTime = new Date();
     startTime.setHours(formValues.startHour);
@@ -24,14 +41,33 @@ function App() {
     endTime.setMinutes(formValues.endMin);
     formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
     setRecords([...records, formValues]);
-    setFormValues({
-      activity: "",
-      startHour: "",
-      startMin: "",
-      endHour: "",
-      endMin: "",
-      duration: 0
+    
+    const res = await fetch('/api/activities', {
+      method: 'POST',
+      body: JSON.stringify(formValues),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+      setError(json.error);
+    }
+
+    if (res.ok) {
+      setError(null);
+      console.log("added", json);
+      setFormValues({
+        activityName: "",
+        startHour: "",
+        startMin: "",
+        endHour: "",
+        endMin: "",
+        duration: 0
+      });
+    }
   };
 
   return (
@@ -40,10 +76,10 @@ function App() {
     <form onSubmit={handleSubmit}>
       <input id="activityInput"
         list='options'
-        name="activity"
+        name="activityName"
         placeholder="Activity"
-        value={formValues.activity}
-        onChange={(e) => setFormValues({...formValues, activity: e.target.value})}
+        value={formValues.activityName}
+        onChange={(e) => setFormValues({...formValues, activityName: e.target.value})}
         required autoFocus
       />
       <datalist id='options'>
@@ -59,9 +95,9 @@ function App() {
         <option value='social time'>social time</option>
       </datalist>
       <br />
-      <div class='timeInputRow'>
+      <div className='timeInputRow'>
         <p>Start Time:</p>
-        <span class='hourMin'>
+        <span className='hourMin'>
           <input 
             className='timeInput'
             value={formValues.startHour}
@@ -81,9 +117,9 @@ function App() {
             required/>
           </span>
       </div>
-      <div class='timeInputRow'>
+      <div className='timeInputRow'>
         <p>End Time:</p>
-        <span class='hourMin'>
+        <span className='hourMin'>
           <input 
             className='timeInput'
             value={formValues.endHour}
@@ -108,7 +144,7 @@ function App() {
         <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th></tr>
         {records.map((record, index) => (
           <tr key={index}>
-            <td>{record.activity}</td>
+            <td>{record.activityName}</td>
             <td>{record.startHour}:{record.startMin}</td>
             <td>{record.endHour}:{record.endMin}</td>
             <td>{record.duration}</td>

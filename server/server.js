@@ -11,7 +11,10 @@ const app = express();
 // middleware
 app.use(express.json());
 
+// configure express access control
 app.use((req, res, next) => {
+  // res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
   console.log(req.path, req.method);
   next();
 });
