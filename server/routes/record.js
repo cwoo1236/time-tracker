@@ -1,27 +1,22 @@
 const express = require('express');
-
+const {
+    createActivity,
+    getActivities,
+    getActivity,
+    deleteActivity,
+    updateActivity
+} = require('../controllers/controllers');
 const router = express.Router();
 
 // boilerplate routes
-// GET all workouts
-router.get('/', (req, res) => {
-    res.json({mssg: 'GET all workouts'});
-});
+router.get('/', getActivities);
 
-// GET a single workout
-router.get('/:id', (req, res) => {
-    res.json({mssg: 'GET a single wokrout'});
-});
+router.get('/:id', getActivity);
 
-router.post('/', (req, res) => {
-    res.json({mssg: 'POST a new workout'});
-});
+router.post('/', createActivity);
 
-router.delete('/:id', (req, res) => {
-    res.json({mssg: 'DELETE a workout'});
-});
+router.delete('/:id', deleteActivity);
 
-router.patch('/:id', (req, res) => {
-    res.json({mssg: 'UPDATE a workout'});
-});
-module.exports = router
+router.patch('/:id', updateActivity);
+
+module.exports = router;
