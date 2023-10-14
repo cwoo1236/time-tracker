@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
+import ActivityDetails from './components/ActivityDetails';
 
 function App() {
   const [formValues, setFormValues] = useState({
@@ -143,12 +144,7 @@ function App() {
       <tbody>
         <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th></tr>
         {records.map((record, index) => (
-          <tr key={index}>
-            <td>{record.activityName}</td>
-            <td>{record.startHour}:{record.startMin}</td>
-            <td>{record.endHour}:{record.endMin}</td>
-            <td>{record.duration}</td>
-          </tr>
+          <ActivityDetails key={index} record={record}/>
         ))}
       </tbody>
     </table>
