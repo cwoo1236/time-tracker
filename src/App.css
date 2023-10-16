@@ -4,13 +4,13 @@
 }
 
 #activitiesTable th, #activitiesTable td {
-  border: 2px solid white;
+  border: 2px solid rgb(126, 126, 126);
   padding: 5px;
-  background-color: inherit;
 }
 
 .timeInput {
-  width: 20px;
+  width: 25px;
+  border: 0;
 }
 
 #outer {
@@ -22,13 +22,13 @@
   padding: 10px;
   width: 150px;
   background-color: rgba(0, 98, 255, 0.5);
-  border-radius: 10px;;
+  border-radius: 10px;
   border: 0;
 }
 
 .timeInputRow {
   margin-bottom: 5px;
-  width: 150px;
+  width: 140px;
 }
 
 .timeInputRow p {
@@ -38,4 +38,26 @@
 
 .hourMin {
   float: right;
+}
+
+#addActivity {
+  border: none;
+  padding: 10px;
+  background-color: orange;
+  margin-top: 5px;
+  border-radius: 10px;;
+}
+
+#timeInputs {
+  background-color: rgba(127, 255, 212, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.activityForm {
+  width: fit-content;
+}
+
+#deleteButton {
+  display: inline;
 }

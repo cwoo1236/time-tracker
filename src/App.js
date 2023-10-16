@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import ActivityDetails from './components/ActivityDetails';
+import { ResponsiveContainer, PieChart, Pie, Legend } from 'recharts';
 
 function App() {
   const [formValues, setFormValues] = useState({
@@ -12,6 +13,34 @@ function App() {
     endMin: "",
     duration: 0
   });
+
+  const [timeTotals, setTimeTotals] = useState([
+    {
+      name: "eat",
+      value: 0, 
+      fill: '#e3c574'
+    },
+    {
+      name: "cook",
+      value: 0,
+      fill: '#9ee68e'
+    },
+    {
+      name: 'downtime',
+      value: 0,
+      fill: '#e37474'
+    }
+  ]);
+
+  const updateTimeTotal = (nameToUpdate, toAdd) => {
+    setTimeTotals(timeTotals => timeTotals.map(item => {
+      if (item.name === nameToUpdate) {
+        return { ...item, value: item.value + toAdd };
+      }
+      return item;
+    }));
+    console.log(timeTotals);
+  };
 
   const [records, setRecords] = useState([]);
   const [error, setError] = useState(null);
@@ -60,6 +89,7 @@ function App() {
     if (res.ok) {
       setError(null);
       console.log("added", json);
+      updateTimeTotal(formValues.activityName, formValues.duration);
       setFormValues({
         activityName: "",
         startHour: "",
@@ -74,7 +104,7 @@ function App() {
   return (
     <div id="outer">
 
-    <form onSubmit={handleSubmit}>
+    <form className='activityForm' onSubmit={handleSubmit}>
       <input id="activityInput"
         list='options'
         name="activityName"
@@ -96,59 +126,69 @@ function App() {
         <option value='social time'>social time</option>
       </datalist>
       <br />
-      <div className='timeInputRow'>
-        <p>Start Time:</p>
-        <span className='hourMin'>
-          <input 
-            className='timeInput'
-            value={formValues.startHour}
-            onChange={(e) => setFormValues({...formValues, startHour: e.target.value})
-            } 
-            name="startHour" 
-            pattern="\d{1,2}"
-            required/>
-            :
-          <input
-            className='timeInput'
-            value={formValues.startMin}
-            onChange={(e) => setFormValues({...formValues, startMin: e.target.value})
-            } 
-            name="startMin" 
-            pattern="\d{2}"
-            required/>
+      <div id='timeInputs'>
+        <div className='timeInputRow'>
+          <p>Start Time:</p>
+          <span className='hourMin'>
+            <input 
+              className='timeInput'
+              value={formValues.startHour}
+              onChange={(e) => setFormValues({...formValues, startHour: e.target.value})
+              } 
+              name="startHour" 
+              pattern="^(?:[1-9]|1[0-2])$"
+              required/>
+              :
+            <input
+              className='timeInput'
+              value={formValues.startMin}
+              onChange={(e) => setFormValues({...formValues, startMin: e.target.value})
+              } 
+              name="startMin" 
+              pattern="^(?:[0-5][0-9])$"
+              required/>
+            </span>
+          </div>
+        <div className='timeInputRow'>
+          <p>End Time:</p>
+          <span className='hourMin'>
+            <input 
+              className='timeInput'
+              value={formValues.endHour}
+              onChange={(e) => setFormValues({...formValues, endHour: e.target.value})}
+              name="endHour"
+              pattern="^(?:[1-9]|1[0-2])$"
+              required/>
+              :
+            <input 
+              className='timeInput'
+              value={formValues.endMin}
+              onChange={(e) => setFormValues({...formValues, endMin: e.target.value})}
+              name="endMin"
+              pattern="^(?:[0-5][0-9])$"
+              required/>
           </span>
+        </div>
       </div>
-      <div className='timeInputRow'>
-        <p>End Time:</p>
-        <span className='hourMin'>
-          <input 
-            className='timeInput'
-            value={formValues.endHour}
-            onChange={(e) => setFormValues({...formValues, endHour: e.target.value})}
-            name="endHour"
-            pattern="\d{1,2}"
-            required/>
-            :
-          <input 
-            className='timeInput'
-            value={formValues.endMin}
-            onChange={(e) => setFormValues({...formValues, endMin: e.target.value})}
-            name="endMin"
-            pattern="\d{2}"
-            required/>
-        </span>
-      </div>
-      <button type="submit">Add activity</button>
+      <button id="addActivity" type="submit">Add activity</button>
     </form>
+    <br />
     <table id="activitiesTable">
       <tbody>
-        <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th></tr>
+        <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th><th></th></tr>
         {records.map((record, index) => (
           <ActivityDetails key={index} record={record}/>
         ))}
       </tbody>
     </table>
     
+    <PieChart
+      width={400}
+      height={400}
+      >
+        <Legend verticalAlign='top' height={36}/>
+        <Pie data={timeTotals} dataKey="value" nameKey="name" cx={200} cy={200} outerRadius={50} label/>
+    </PieChart>
 
   </div>
   );
