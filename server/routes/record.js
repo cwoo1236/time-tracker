@@ -4,7 +4,8 @@ const {
     getActivities,
     getActivity,
     deleteActivity,
-    updateActivity
+    updateActivity,
+    deleteActivities
 } = require('../controllers/controllers');
 const router = express.Router();
 
@@ -16,6 +17,8 @@ router.get('/:id', getActivity);
 router.post('/', createActivity);
 
 router.delete('/:id', deleteActivity);
+
+router.delete('/', deleteActivities);
 
 router.patch('/:id', updateActivity);
 

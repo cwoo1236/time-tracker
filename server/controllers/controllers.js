@@ -55,6 +55,12 @@ const deleteActivity = async (req, res) => {
     res.status(200).json(activity);
 }
 
+const deleteActivities = async (req, res) => {
+    const activities = await Activity.deleteMany({});
+
+    res.status(200).json(activities);
+}
+
 // UPDATE one
 const updateActivity = async (req, res) => {
     const {id} = req.params;
@@ -79,5 +85,6 @@ module.exports = {
     getActivity,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    deleteActivities
 }
