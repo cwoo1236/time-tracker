@@ -1,10 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
 import ActivityDetails from './components/ActivityDetails';
 import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend } from 'recharts';
+import { useActivitiesContext } from './hooks/useActivitiesContext';
 
 function App() {
+  const { activities, dispatch } = useActivitiesContext();
+
   const [formValues, setFormValues] = useState({
     activityName: "",
     startHour: "",
@@ -72,23 +74,22 @@ function App() {
     console.log(timeTotals);
   };
 
-  const [records, setRecords] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // console.log("opened");
-
     const fetchData = async () => {
       const res = await fetch('/api/activities');
       const json = await res.json();
-      console.log(json);
 
       if (res.ok) {
-        setRecords(json);
+        console.log("Dispatching...");
+        dispatch({type: 'SET_ACTIVITIES', payload: json});
+        console.log("Dispatched", json);
       }
     }
 
     fetchData();
+    console.log(activities);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -100,8 +101,7 @@ function App() {
     endTime.setHours(formValues.endHour);
     endTime.setMinutes(formValues.endMin);
     formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
-    setRecords([...records, formValues]);
-    
+
     const res = await fetch('/api/activities', {
       method: 'POST',
       body: JSON.stringify(formValues),
@@ -117,6 +117,7 @@ function App() {
     }
 
     if (res.ok) {
+      dispatch( {type: 'CREATE_ACTIVITY', payload: json});
       setError(null);
       console.log("added", json);
       updateTimeTotal(formValues.activityName, formValues.duration);
@@ -207,7 +208,7 @@ function App() {
         <table id="activitiesTable">
           <tbody>
             <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th><th></th></tr>
-            {records.map((record, index) => (
+            {activities && activities.map((record, index) => (
               <ActivityDetails key={index} record={record}/>
             ))}
           </tbody>
