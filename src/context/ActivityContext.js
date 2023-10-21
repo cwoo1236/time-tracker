@@ -15,6 +15,11 @@ export const activitiesReducer = (state, action) => {
             return {
                 activities: [action.payload, ...state.activities]
             };
+        case 'DELETE_ACTIVITY':
+            return {
+                activities: state.activities.filter((a) => a._id !== action.payload._id)
+            };
+
         default:
             return state;
     }
