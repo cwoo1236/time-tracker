@@ -66,10 +66,16 @@
   display: inline;
 }
 
-.pieSpan {
-  display: inline;
+.pie {
+  width: 400px;
+  height: 400px;
 }
 
 .tableSpan {
   display: inline;
+}
+
+.bar {
+  width: 800px;
+  height: 800px;
 }

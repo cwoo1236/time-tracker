@@ -69,10 +69,15 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const startTime = new Date();
+    const endTime = new Date();
+
+    if (Number(formValues.startHour) > Number(formValues.endHour)) {
+      endTime.setHours(Number(formValues.endHour) + 12);
+    } else {
+      endTime.setHours(formValues.endHour);
+    }
     startTime.setHours(formValues.startHour);
     startTime.setMinutes(formValues.startMin);
-    const endTime = new Date();
-    endTime.setHours(formValues.endHour);
     endTime.setMinutes(formValues.endMin);
     formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
 
@@ -186,26 +191,29 @@ function App() {
           </tbody>
         </table>
       </div>
-      <div className='pieSpan'>
-        <PieChart
-          width={400}
-          height={400}
-          >
-            <Legend verticalAlign='top' height={36}/>
-            <Pie data={timeTotals} dataKey="value" nameKey="name" cx={200} cy={200} outerRadius={50} label/>
-        </PieChart>
+      <div className='pie'>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart
+            >
+              <Legend verticalAlign='top' height={36}/>
+              <Pie data={timeTotals} dataKey="value" nameKey="name" cx={200} cy={200} outerRadius={100  } label/>
+          </PieChart>
+        </ResponsiveContainer>
       </div>
-      <div className='barSpan'>
-        <BarChart 
-          width={500}
-          height={500}
-          data={timeTotals}
-        >
-          <XAxis dataKey='name' />
-          <YAxis />
-          <Legend />
-          <Bar dataKey='value' />
-        </BarChart>
+
+      <div className='bar'>
+        <ResponsiveContainer width="60%" height="60%">
+          <BarChart
+            layout='vertical'
+            data={timeTotals}
+            margin={{top: 10, left: 50, right: 20, bottom: 10}}
+          >
+            <XAxis type='number'/>
+            <YAxis type='category' dataKey='name'/>
+            <Legend />
+            <Bar dataKey='value' />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   </div>
