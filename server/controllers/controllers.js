@@ -102,11 +102,13 @@ const createTimeTotal = async (req, res) => {
 }
 
 const updateTimeTotal = async (req, res) => {
-    const {id} = req.params;
+    const {name} = req.params;
 
-    const timeTotal = await TimeTotal.findOneAndUpdate({_id: id}, {
+    const timeTotal = await TimeTotal.findOneAndUpdate({name: name}, {
         ...req.body
     });
+
+    console.log("in updateTimeTotal;", req.body);
 
     if (!timeTotal) {
         return res.status(404).json({error: 'No such timeTotal'});

@@ -25,7 +25,7 @@ router.delete('/activities/', deleteActivities);
 
 router.patch('/activities/:id', updateActivity);
 
-router.patch('/timeTotals/', updateTimeTotal);
+router.patch('/timeTotals/:name', updateTimeTotal);
 
 router.get('/timeTotals/', getTimeTotals);
 

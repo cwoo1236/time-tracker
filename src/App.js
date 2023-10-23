@@ -16,80 +16,54 @@ function App() {
     duration: 0
   });
 
-  const [timeTotals, setTimeTotals] = useState([
-    {
-      name: "eat",
-      value: 0, 
-      fill: '#e3c574'
-    },
-    {
-      name: "exerciseOther",
-      value: 0,
-      fill: '#6f76f2'
-    },
-    {
-      name: "cook",
-      value: 0,
-      fill: '#9ee68e'
-    },
-    {
-      name: 'downtime',
-      value: 0,
-      fill: '#e37474'
-    },
-    {
-      name: 'chores',
-      value: 0,
-      fill: '#c26ff2'
-    },
-    {
-      name: 'classwork',
-      value: 0,
-      fill: '#ecf08b'
-    },
-    {
-      name: 'prof dev',
-      value: 0, 
-      fill: '#8bf0bc'
-    },
-    {
-      name: 'social',
-      value: 0,
-      fill: '#f08bae'
-    },
-    {
-      name: 'projects',
-      value: 0,
-      fill: '#a6a6a6'
-    }
-  ]);
+  const [timeTotals, setTimeTotals] = useState(null);
 
-  const updateTimeTotal = (nameToUpdate, toAdd) => {
+  const updateTimeTotal = async (nameToUpdate, toAdd) => {
     setTimeTotals(timeTotals => timeTotals.map(item => {
       if (item.name === nameToUpdate) {
         return { ...item, value: item.value + toAdd };
       }
       return item;
     }));
-    console.log(timeTotals);
+
+    const res = await fetch('/api/timeTotals/' + nameToUpdate, {
+      method: 'PATCH',
+      body: JSON.stringify( {$inc: {value: toAdd}} ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+      setError(json.error);
+    } else {
+      console.log("PATCHed\n", json);
+    }
   };
 
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/api/activities');
-      const json = await res.json();
+      const activitiesRes = await fetch('/api/activities');
+      const activitiesJson = await activitiesRes.json();
 
-      if (res.ok) {
-        console.log("Dispatching...");
-        dispatch({type: 'SET_ACTIVITIES', payload: json});
-        console.log("Dispatched", json);
+      if (activitiesRes.ok) {
+        dispatch({type: 'SET_ACTIVITIES', payload: activitiesJson});
+        console.log("Dispatched", activitiesJson);
+      }
+
+      const timeTotalsRes = await fetch('/api/timeTotals/');
+      const timeTotalsJson = await timeTotalsRes.json();
+
+      if (timeTotalsRes.ok) {
+        setTimeTotals(timeTotalsJson);
       }
     }
 
     fetchData();
-    console.log(activities);
   }, []);
 
   const handleSubmit = async (e) => {
