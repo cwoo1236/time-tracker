@@ -102,7 +102,7 @@ function App() {
     endTime.setMinutes(formValues.endMin);
     formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
 
-    const res = await fetch('/api/activities', {
+    const postRes = await fetch('/api/activities', {
       method: 'POST',
       body: JSON.stringify(formValues),
       headers: {
@@ -110,13 +110,11 @@ function App() {
       }
     });
 
-    const json = await res.json();
+    const json = await postRes.json();
 
-    if (!res.ok) {
+    if (!postRes.ok) {
       setError(json.error);
-    }
-
-    if (res.ok) {
+    } else {
       dispatch( {type: 'CREATE_ACTIVITY', payload: json});
       setError(null);
       console.log("added", json);

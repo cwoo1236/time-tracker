@@ -5,21 +5,32 @@ const {
     getActivity,
     deleteActivity,
     updateActivity,
-    deleteActivities
+    deleteActivities,
+    updateTimeTotal,
+    getTimeTotals,
+    createTimeTotal,
+    deleteTimeTotal
 } = require('../controllers/controllers');
 const router = express.Router();
 
-// boilerplate routes
-router.get('/', getActivities);
+router.get('/activities/', getActivities);
 
-router.get('/:id', getActivity);
+router.get('/activities/:id', getActivity);
 
-router.post('/', createActivity);
+router.post('/activities/', createActivity);
 
-router.delete('/:id', deleteActivity);
+router.delete('/activities/:id', deleteActivity);
 
-router.delete('/', deleteActivities);
+router.delete('/activities/', deleteActivities);
 
-router.patch('/:id', updateActivity);
+router.patch('/activities/:id', updateActivity);
+
+router.patch('/timeTotals/', updateTimeTotal);
+
+router.get('/timeTotals/', getTimeTotals);
+
+router.post('/timeTotals/', createTimeTotal);
+
+router.delete('/timeTotals/:id', deleteTimeTotal);
 
 module.exports = router;

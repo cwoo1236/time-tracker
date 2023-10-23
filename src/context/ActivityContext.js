@@ -5,8 +5,6 @@ export const ActivityContext = createContext();
 export const activitiesReducer = (state, action) => {
     switch (action.type) {
         case 'SET_ACTIVITIES':
-            console.log("hit set activities");
-            console.log("payload is", action.payload);
             return {
                 activities: action.payload
             };

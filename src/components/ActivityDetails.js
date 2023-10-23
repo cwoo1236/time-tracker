@@ -17,11 +17,11 @@ const ActivityDetails = ({record}) => {
 
     return (
         <tr>
-        <td>{record.activityName}</td>
-        <td>{record.startHour}:{record.startMin}</td>
-        <td>{record.endHour}:{record.endMin}</td>
-        <td>{record.duration}</td>
-        <td><button onClick={handleClick}>delete row</button></td>
+            <td>{record.activityName}</td>
+            <td>{record.startHour}:{record.startMin}</td>
+            <td>{record.endHour}:{record.endMin}</td>
+            <td>{record.duration}</td>
+            <td><button onClick={handleClick}>delete row</button></td>
         </tr>
     )
 }
