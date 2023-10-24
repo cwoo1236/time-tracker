@@ -3,21 +3,46 @@ import { useState, useEffect } from 'react';
 import ActivityDetails from './components/ActivityDetails';
 import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend } from 'recharts';
 import { useActivitiesContext } from './hooks/useActivitiesContext';
-
+import ReactDatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 function App() {
+  // Initialize context and state
   const { activities, dispatch } = useActivitiesContext();
-
   const [formValues, setFormValues] = useState({
     activityName: "",
     startHour: "",
     startMin: "",
     endHour: "",
     endMin: "",
-    duration: 0
+    duration: 0,
+    activityDate: new Date()
   });
-
   const [timeTotals, setTimeTotals] = useState(null);
+  const [error, setError] = useState(null);
 
+  // On page load
+  useEffect(() => {
+    const fetchData = async () => {
+      const activitiesRes = await fetch('/api/activities');
+      const activitiesJson = await activitiesRes.json();
+
+      if (activitiesRes.ok) {
+        dispatch({type: 'SET_ACTIVITIES', payload: activitiesJson});
+        console.log("Dispatched", activitiesJson);
+      }
+
+      const timeTotalsRes = await fetch('/api/timeTotals/');
+      const timeTotalsJson = await timeTotalsRes.json();
+
+      if (timeTotalsRes.ok) {
+        setTimeTotals(timeTotalsJson);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Handle updating time totals when new activity is added
   const updateTimeTotal = async (nameToUpdate, toAdd) => {
     setTimeTotals(timeTotals => timeTotals.map(item => {
       if (item.name === nameToUpdate) {
@@ -43,29 +68,7 @@ function App() {
     }
   };
 
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const activitiesRes = await fetch('/api/activities');
-      const activitiesJson = await activitiesRes.json();
-
-      if (activitiesRes.ok) {
-        dispatch({type: 'SET_ACTIVITIES', payload: activitiesJson});
-        console.log("Dispatched", activitiesJson);
-      }
-
-      const timeTotalsRes = await fetch('/api/timeTotals/');
-      const timeTotalsJson = await timeTotalsRes.json();
-
-      if (timeTotalsRes.ok) {
-        setTimeTotals(timeTotalsJson);
-      }
-    }
-
-    fetchData();
-  }, []);
-
+  // Submit Activity
   const handleSubmit = async (e) => {
     e.preventDefault();
     const startTime = new Date();
@@ -96,7 +99,6 @@ function App() {
     } else {
       dispatch( {type: 'CREATE_ACTIVITY', payload: json});
       setError(null);
-      console.log("added", json);
       updateTimeTotal(formValues.activityName, formValues.duration);
       setFormValues({
         activityName: "",
@@ -104,7 +106,8 @@ function App() {
         startMin: "",
         endHour: "",
         endMin: "",
-        duration: 0
+        duration: 0,
+        activityDate: new Date()
       });
     }
   };
@@ -176,6 +179,11 @@ function App() {
               required/>
           </span>
         </div>
+        <ReactDatePicker id="calendar" selected={formValues.activityDate} onChange={(date) => {
+          setFormValues({...formValues, activityDate: date});
+          console.log(date.getMonth() + 1);
+          }
+        }/>
       </div>
       <button id="addActivity" type="submit">Add activity</button>
     </form>
@@ -184,7 +192,7 @@ function App() {
       <div className='tableSpan'>
         <table id="activitiesTable">
           <tbody>
-            <tr><th>Activity</th><th>Start Time</th><th>End Time</th><th>Duration (min)</th><th></th></tr>
+            <tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th></th></tr>
             {activities && activities.map((record, index) => (
               <ActivityDetails key={index} record={record}/>
             ))}

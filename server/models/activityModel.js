@@ -26,6 +26,10 @@ const activitySchema = new mongoose.Schema({
     duration: {
         type: Number,
         required: true
+    },
+    activityDate: {
+        type: Date,
+        required: true
     }
 }, { timestamps: true });
 

@@ -29,11 +29,11 @@ const getActivity = async (req, res) => {
 
 // POST one
 const createActivity = async (req, res) => {
-    const {activityName, startHour, startMin, endHour, endMin, duration} = req.body;
+    const {activityName, startHour, startMin, endHour, endMin, duration, activityDate} = req.body;
     
     // add doc to db
     try {
-        const activity = await Activity.create({activityName, startHour, startMin, endHour, endMin, duration});
+        const activity = await Activity.create({activityName, startHour, startMin, endHour, endMin, duration, activityDate});
         res.status(200).json(activity);
     } catch (error) {
         res.status(400).json({error: error.message});

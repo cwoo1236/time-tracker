@@ -30,13 +30,16 @@ const ActivityDetails = ({record}) => {
         }
     }
 
+    const theDate = new Date(record.activityDate);
+
     return (
         <tr>
+            <td>{`${theDate.getMonth() + 1}/${theDate.getDate()}`}</td>
             <td>{record.activityName}</td>
+            <td>{record.duration}</td>
             <td>{record.startHour}:{record.startMin}</td>
             <td>{record.endHour}:{record.endMin}</td>
-            <td>{record.duration}</td>
-            <td><button onClick={handleClick}>delete row</button></td>
+            <td><button onClick={handleClick}>Delete</button></td>
         </tr>
     )
 }
