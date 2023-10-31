@@ -11,3 +11,85 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#activitiesTable {
+  border: 1px solid white;
+  background-color: rgba(100, 149, 237, 0.3);
+}
+
+#activitiesTable th, #activitiesTable td {
+  border: 2px solid rgb(126, 126, 126);
+  padding: 5px;
+}
+
+.timeInput {
+  width: 25px;
+  border: 0;
+}
+
+#outer {
+  margin: 10px;
+}
+
+#activityInput {
+  margin: 0 0 5px 0;
+  padding: 10px;
+  width: 150px;
+  background-color: rgba(0, 98, 255, 0.5);
+  border-radius: 10px;
+  border: 0;
+}
+
+.timeInputRow {
+  margin-bottom: 5px;
+  width: 140px;
+}
+
+.timeInputRow p {
+  display: inline;
+  margin-right: 3px;
+}
+
+.hourMin {
+  float: right;
+}
+
+#addActivity {
+  border: none;
+  padding: 10px;
+  background-color: orange;
+  margin-top: 5px;
+  border-radius: 10px;;
+}
+
+#timeInputs {
+  background-color: rgba(127, 255, 212, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.activityForm {
+  width: fit-content;
+}
+
+#deleteButton {
+  display: inline;
+}
+
+.tableAndPie {
+  display: inline;
+}
+
+.pie {
+  width: 400px;
+  height: 400px;
+}
+
+.tableSpan {
+  display: inline;
+}
+
+.bar {
+  width: 800px;
+  height: 800px;
+}

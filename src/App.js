@@ -1,4 +1,4 @@
-import './App.css';
+// import './App.css';
 import { useState, useEffect } from 'react';
 import ActivityDetails from './components/ActivityDetails';
 import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend } from 'recharts';
@@ -189,8 +189,8 @@ function App() {
     </form>
     <br />
     <div className='tableAndPie'>
-      <div className='tableSpan'>
-        <table id="activitiesTable">
+      <div id='tableContainer'>
+        <table className="table">
           <tbody>
             <tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th></th></tr>
             {activities && activities.map((record, index) => (
