@@ -1,10 +1,10 @@
-// import './App.css';
 import { useState, useEffect } from 'react';
 import ActivityDetails from './components/ActivityDetails';
 import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend } from 'recharts';
 import { useActivitiesContext } from './hooks/useActivitiesContext';
 import ReactDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import "../node_modules/bootstrap/js/dist/dropdown.js"
 function App() {
   // Initialize context and state
   const { activities, dispatch } = useActivitiesContext();
@@ -38,7 +38,6 @@ function App() {
         setTimeTotals(timeTotalsJson);
       }
     }
-
     fetchData();
   }, []);
 
@@ -114,9 +113,22 @@ function App() {
 
   return (
     <div id="outer">
-
-    <form className='activityForm' onSubmit={handleSubmit}>
-      <input id="activityInput"
+      <form className='activityForm' onSubmit={handleSubmit}>
+        <div className='dropdown'>
+          <button type='button' className='btn btn-primary dropdown-toggle' data-bs-toggle="dropdown">Activity: {formValues.activityName ? formValues.activityName : "None"}</button>
+          <ul className='dropdown-menu'>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "eat"})}>eat</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "exerciseOther"})}>exerciseOther</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "cook"})}>cook</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "downtime"})}>downtime</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "chores"})}>chores</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "classwork"})}>classwork</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "professional development"})}>professional development</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "social time"})}>social time</a></li>
+            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "projects"})}>projects</a></li>
+          </ul>
+        </div>
+      {/* <input id="activityInput"
         list='options'
         name="activityName"
         placeholder="Activity"
@@ -134,7 +146,7 @@ function App() {
         <option value='prof dev'>professional development</option>
         <option value='social'>social time</option>
         <option value='projects'>projects</option>
-      </datalist>
+      </datalist> */}
       <br />
       <div id='timeInputs'>
         <div className='timeInputRow'>
@@ -185,14 +197,16 @@ function App() {
           }
         }/>
       </div>
-      <button id="addActivity" type="submit">Add activity</button>
+      <button className='btn btn-primary' type="submit" disabled={!(formValues.activityName && formValues.startHour && formValues.startMin && formValues.endHour && formValues.endMin)}>Add activity</button>
     </form>
     <br />
     <div className='tableAndPie'>
       <div id='tableContainer'>
-        <table className="table">
-          <tbody>
+        <table className="table table-bordered table-sm">
+          <thead className='table-dark'>
             <tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th></th></tr>
+          </thead>
+          <tbody>
             {activities && activities.map((record, index) => (
               <ActivityDetails key={index} record={record}/>
             ))}
