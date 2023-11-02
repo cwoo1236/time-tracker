@@ -82,7 +82,8 @@ function App() {
     startTime.setMinutes(formValues.startMin);
     endTime.setMinutes(formValues.endMin);
     formValues.duration = Math.floor((endTime - startTime) / 60000); // convert to minutes
-
+    formValues.activityDate.setHours(formValues.startHour);
+    formValues.activityDate.setMinutes(formValues.startMin);
     const postRes = await fetch('/api/activities', {
       method: 'POST',
       body: JSON.stringify(formValues),
@@ -117,37 +118,17 @@ function App() {
         <div className='dropdown'>
           <button type='button' className='btn btn-primary dropdown-toggle' data-bs-toggle="dropdown">Activity: {formValues.activityName ? formValues.activityName : "None"}</button>
           <ul className='dropdown-menu'>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "eat"})}>eat</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "exerciseOther"})}>exerciseOther</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "cook"})}>cook</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "downtime"})}>downtime</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "chores"})}>chores</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "classwork"})}>classwork</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "professional development"})}>professional development</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "social time"})}>social time</a></li>
-            <li><a class="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "projects"})}>projects</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "eat"})}>eat</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "exerciseOther"})}>exerciseOther</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "cook"})}>cook</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "downtime"})}>downtime</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "chores"})}>chores</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "classwork"})}>classwork</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "professional development"})}>professional development</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "social time"})}>social time</a></li>
+            <li><a className="dropdown-item" href="#" onClick={() => setFormValues({...formValues, activityName: "projects"})}>projects</a></li>
           </ul>
         </div>
-      {/* <input id="activityInput"
-        list='options'
-        name="activityName"
-        placeholder="Activity"
-        value={formValues.activityName}
-        onChange={(e) => setFormValues({...formValues, activityName: e.target.value})}
-        required autoFocus
-      />
-      <datalist id='options'>
-        <option value='eat'>eat</option>
-        <option value='exerciseOther'>exerciseOther</option>
-        <option value='cook'>cook</option>
-        <option value='downtime'>downtime</option>
-        <option value='chores'>chores</option>
-        <option value='classwork'>classwork</option>
-        <option value='prof dev'>professional development</option>
-        <option value='social'>social time</option>
-        <option value='projects'>projects</option>
-      </datalist> */}
-      <br />
       <div id='timeInputs'>
         <div className='timeInputRow'>
           <p>Start Time:</p>
@@ -193,8 +174,7 @@ function App() {
         </div>
         <ReactDatePicker id="calendar" selected={formValues.activityDate} onChange={(date) => {
           setFormValues({...formValues, activityDate: date});
-          console.log(date.getMonth() + 1);
-          }
+        }
         }/>
       </div>
       <button className='btn btn-primary' type="submit" disabled={!(formValues.activityName && formValues.startHour && formValues.startMin && formValues.endHour && formValues.endMin)}>Add activity</button>

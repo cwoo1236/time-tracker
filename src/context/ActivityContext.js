@@ -10,8 +10,9 @@ export const activitiesReducer = (state, action) => {
             };
         case 'CREATE_ACTIVITY':
             console.log("create payload is", [action.payload, ...state.activities]);
+            let sorted = [action.payload, ...state.activities].sort((a, b) => Date.parse(a.activityDate) - Date.parse(b.activityDate));
             return {
-                activities: [action.payload, ...state.activities]
+                activities: sorted
             };
         case 'DELETE_ACTIVITY':
             return {
