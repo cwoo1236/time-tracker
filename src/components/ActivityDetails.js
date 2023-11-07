@@ -22,10 +22,8 @@ const ActivityDetails = ({record}) => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log("after PATCH");
 
         const json2 = await res2.json();
-        console.log("PATCH result", json2);
 
         if (!res2.ok) {
             console.error("Something went wrong subtracting from timeTotal");
