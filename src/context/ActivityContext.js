@@ -1,9 +1,33 @@
 import { createContext, useReducer } from "react";
 
+// Increment appropriate timeTotal when activity is added
+// async function updateTimeTotalInDb(nameToUpdate, toAdd) {
+//     console.log("toAdd is", toAdd);
+//     const res = await fetch('/api/timeTotals/' + nameToUpdate, {
+//       method: 'PATCH',
+//       body: JSON.stringify( {$inc: {value: toAdd}} ),
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     });
+
+//     const json = await res.json();
+
+//     if (!res.ok) {
+//       console.log(`Failed to update ${nameToUpdate}'s timeTotal.`);
+//     } else {
+//       console.log(`Updated ${nameToUpdate}'s timeTotal.`, json);
+//     }
+// }
+
+function updateTimeTotalLocal(timeTotals, nameToUpdate, duration) {
+    return timeTotals.map(item => item.name === nameToUpdate ? { ...item, value: item.value + duration } : item);
+}
+
 export const ActivityContext = createContext();
 
-
 export const activitiesReducer = (state, action) => {
+    let nameToUpdate, duration;
     switch (action.type) {
         case 'SET_ACTIVITIES':
             return {
@@ -12,40 +36,27 @@ export const activitiesReducer = (state, action) => {
             };
         case 'CREATE_ACTIVITY':
             let sorted = [action.payload.activities, ...state.activities].sort((a, b) => Date.parse(a.activityDate) - Date.parse(b.activityDate));
-            const nameToUpdate = action.payload.timeTotalsParts.activityName;
-            const toAdd = action.payload.timeTotalsParts.duration;
+            nameToUpdate = action.payload.timeTotalsParts.activityName;
+            duration = action.payload.timeTotalsParts.duration;
 
-            updateTimeTotal(nameToUpdate, toAdd);
+            // updateTimeTotalInDb(nameToUpdate, duration);
 
             return {
                 activities: sorted,
-                timeTotals: state.timeTotals.map(item => item.name === nameToUpdate ? { ...item, value: item.value + toAdd } : item)
+                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration)
             }
         case 'DELETE_ACTIVITY':
+            nameToUpdate = action.payload.timeTotalsParts.activityName;
+            duration = action.payload.timeTotalsParts.duration;
+
+            // updateTimeTotalInDb(nameToUpdate, duration * -1);
             return {
-                activities: state.activities.filter((a) => a._id !== action.payload._id)
+                activities: state.activities.filter((a) => a._id !== action.payload.activity._id),
+                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration * -1)
             }
 
         default:
             return state;
-    }
-}
-
-async function updateTimeTotal(nameToUpdate, toAdd) {
-    const res = await fetch('/api/timeTotals/' + nameToUpdate, {
-      method: 'PATCH',
-      body: JSON.stringify( {$inc: {value: toAdd}} ),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const json = await res.json();
-
-    if (!res.ok) {
-      console.log(`Failed to update ${nameToUpdate}'s timeTotal.`);
-    } else {
-      console.log(`Updated ${nameToUpdate}'s timeTotal.`, json);
     }
 }
 

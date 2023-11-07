@@ -17,8 +17,6 @@ function App() {
     duration: 0,
     activityDate: new Date()
   });
-  // const [timeTotals, setTimeTotals] = useState(null);
-  // const [error, setError] = useState(null);
 
   // On page load
   useEffect(() => {
@@ -44,33 +42,7 @@ function App() {
       console.log("Dispatched SET_ACTIVITIES:", payload);
     }
     fetchData();
-  }, []);
-
-  // Handle updating time totals when new activity is added
-  // const updateTimeTotal = async (nameToUpdate, toAdd) => {
-  //   setTimeTotals(timeTotals => timeTotals.map(item => {
-  //     if (item.name === nameToUpdate) {
-  //       return { ...item, value: item.value + toAdd };
-  //     }
-  //     return item;
-  //   }));
-
-  //   const res = await fetch('/api/timeTotals/' + nameToUpdate, {
-  //     method: 'PATCH',
-  //     body: JSON.stringify( {$inc: {value: toAdd}} ),
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   });
-
-  //   const json = await res.json();
-
-  //   if (!res.ok) {
-  //     setError(json.error);
-  //   } else {
-  //     console.log("PATCHed\n", json);
-  //   }
-  // };
+  }, [dispatch]);
 
   // Submit Activity
   const handleSubmit = async (e) => {
@@ -99,13 +71,28 @@ function App() {
 
     const json = await postRes.json();
 
+
+    const res = await fetch('/api/timeTotals/' + formValues.activityName, {
+      method: 'PATCH',
+      body: JSON.stringify( {$inc: {value: formValues.duration}} ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const json2 = await res.json();
+
+    if (!res.ok) {
+      console.log(`Failed to update ${formValues.activityName}'s timeTotal.`);
+    } else {
+      console.log(`Updated ${formValues.activityName}'s timeTotal.`, json);
+    }
+
     if (!postRes.ok) {
       console.log("Failed to POST activity", json.error);
     } else {
       let payload = { activities: json, timeTotalsParts: { activityName: formValues.activityName, duration: formValues.duration }};
       dispatch({ type: 'CREATE_ACTIVITY', payload: payload });
-      // setError(null);
-      // updateTimeTotal(formValues.activityName, formValues.duration);
       setFormValues({
         activityName: "",
         startHour: "",

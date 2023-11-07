@@ -4,15 +4,17 @@ const ActivityDetails = ({record}) => {
     const { dispatch } = useActivitiesContext();
 
     const handleClick = async () => {
+        // DELETE the activity from db
         const res = await fetch('/api/activities/' + record._id, {
             method: 'DELETE'
         });
         const json = await res.json();
 
-        if (res.ok) {
-            dispatch({type: 'DELETE_ACTIVITY', payload: json});
+        if (!res.ok) {
+            console.log("Failed to DELETE from db.");
         }
-
+        console.log("before PATCH");
+        // Decrement timeTotal in db
         const res2 = await fetch('/api/timeTotals/' + record.activityName, {
             method: 'PATCH',
             body: JSON.stringify({ $inc: { value: (record.duration * -1) }}),
@@ -20,16 +22,22 @@ const ActivityDetails = ({record}) => {
                 'Content-Type': 'application/json'
             }
         });
+        console.log("after PATCH");
 
         const json2 = await res2.json();
+        console.log("PATCH result", json2);
 
         if (!res2.ok) {
             console.error("Something went wrong subtracting from timeTotal");
-        } else {
-            console.log("PATCH reduced\n", json2);
         }
-    }
 
+        // Update state
+        const payload = { activity: json, timeTotalsParts: { activityName: record.activityName, duration: record.duration }};
+        dispatch({type: 'DELETE_ACTIVITY', payload: payload});
+        console.log(`DELETE activity w/ id ${record._id}`);
+    }
+    
+    // Date.parse() instead?
     const theDate = new Date(record.activityDate);
 
     return (
