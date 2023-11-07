@@ -6,8 +6,8 @@ import ReactDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import "../node_modules/bootstrap/js/dist/dropdown.js"
 function App() {
-  // Initialize context and state
-  const { activities, dispatch } = useActivitiesContext();
+  // Hooks
+  const { activities, timeTotals, dispatch } = useActivitiesContext();
   const [formValues, setFormValues] = useState({
     activityName: "",
     startHour: "",
@@ -17,55 +17,60 @@ function App() {
     duration: 0,
     activityDate: new Date()
   });
-  const [timeTotals, setTimeTotals] = useState(null);
-  const [error, setError] = useState(null);
+  // const [timeTotals, setTimeTotals] = useState(null);
+  // const [error, setError] = useState(null);
 
   // On page load
   useEffect(() => {
     const fetchData = async () => {
       const activitiesRes = await fetch('/api/activities');
-      const activitiesJson = await activitiesRes.json();
+      let activitiesJson = await activitiesRes.json();
 
-      if (activitiesRes.ok) {
-        dispatch({type: 'SET_ACTIVITIES', payload: activitiesJson});
-        console.log("Dispatched", activitiesJson);
+      if (!activitiesRes.ok) {
+        console.log("Failed to GET activities from db.");
+        activitiesJson = null;
       }
 
       const timeTotalsRes = await fetch('/api/timeTotals/');
-      const timeTotalsJson = await timeTotalsRes.json();
+      let timeTotalsJson = await timeTotalsRes.json();
 
-      if (timeTotalsRes.ok) {
-        setTimeTotals(timeTotalsJson);
+      if (!timeTotalsRes.ok) {
+        console.log("Failed to GET time totals from db.");
+        timeTotalsJson = null;
       }
+      
+      const payload = { activities: activitiesJson, timeTotals: timeTotalsJson };
+      dispatch({type: 'SET_ACTIVITIES', payload: payload});
+      console.log("Dispatched SET_ACTIVITIES:", payload);
     }
     fetchData();
   }, []);
 
   // Handle updating time totals when new activity is added
-  const updateTimeTotal = async (nameToUpdate, toAdd) => {
-    setTimeTotals(timeTotals => timeTotals.map(item => {
-      if (item.name === nameToUpdate) {
-        return { ...item, value: item.value + toAdd };
-      }
-      return item;
-    }));
+  // const updateTimeTotal = async (nameToUpdate, toAdd) => {
+  //   setTimeTotals(timeTotals => timeTotals.map(item => {
+  //     if (item.name === nameToUpdate) {
+  //       return { ...item, value: item.value + toAdd };
+  //     }
+  //     return item;
+  //   }));
 
-    const res = await fetch('/api/timeTotals/' + nameToUpdate, {
-      method: 'PATCH',
-      body: JSON.stringify( {$inc: {value: toAdd}} ),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+  //   const res = await fetch('/api/timeTotals/' + nameToUpdate, {
+  //     method: 'PATCH',
+  //     body: JSON.stringify( {$inc: {value: toAdd}} ),
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   });
 
-    const json = await res.json();
+  //   const json = await res.json();
 
-    if (!res.ok) {
-      setError(json.error);
-    } else {
-      console.log("PATCHed\n", json);
-    }
-  };
+  //   if (!res.ok) {
+  //     setError(json.error);
+  //   } else {
+  //     console.log("PATCHed\n", json);
+  //   }
+  // };
 
   // Submit Activity
   const handleSubmit = async (e) => {
@@ -95,11 +100,12 @@ function App() {
     const json = await postRes.json();
 
     if (!postRes.ok) {
-      setError(json.error);
+      console.log("Failed to POST activity", json.error);
     } else {
-      dispatch( {type: 'CREATE_ACTIVITY', payload: json});
-      setError(null);
-      updateTimeTotal(formValues.activityName, formValues.duration);
+      let payload = { activities: json, timeTotalsParts: { activityName: formValues.activityName, duration: formValues.duration }};
+      dispatch({ type: 'CREATE_ACTIVITY', payload: payload });
+      // setError(null);
+      // updateTimeTotal(formValues.activityName, formValues.duration);
       setFormValues({
         activityName: "",
         startHour: "",
