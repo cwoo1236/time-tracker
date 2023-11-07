@@ -39,17 +39,14 @@ export const activitiesReducer = (state, action) => {
             nameToUpdate = action.payload.timeTotalsParts.activityName;
             duration = action.payload.timeTotalsParts.duration;
 
-            // updateTimeTotalInDb(nameToUpdate, duration);
-
             return {
                 activities: sorted,
-                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration)
+                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration).sort((a, b) => b.value - a.value)
             }
         case 'DELETE_ACTIVITY':
             nameToUpdate = action.payload.timeTotalsParts.activityName;
             duration = action.payload.timeTotalsParts.duration;
 
-            // updateTimeTotalInDb(nameToUpdate, duration * -1);
             return {
                 activities: state.activities.filter((a) => a._id !== action.payload.activity._id),
                 timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration * -1)
