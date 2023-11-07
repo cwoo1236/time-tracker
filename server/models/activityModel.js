@@ -27,6 +27,10 @@ const activitySchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    comments: {
+        type: String,
+        required: false
+    },
     activityDate: {
         type: Date,
         required: true

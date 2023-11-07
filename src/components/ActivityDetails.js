@@ -45,6 +45,7 @@ const ActivityDetails = ({record}) => {
             <td>{record.duration}</td>
             <td>{record.startHour}:{record.startMin}</td>
             <td>{record.endHour}:{record.endMin}</td>
+            <td>{record.comments}</td>
             <td><button onClick={handleClick}>Delete</button></td>
         </tr>
     )

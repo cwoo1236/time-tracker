@@ -49,7 +49,7 @@ export const activitiesReducer = (state, action) => {
 
             return {
                 activities: state.activities.filter((a) => a._id !== action.payload.activity._id),
-                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration * -1)
+                timeTotals: updateTimeTotalLocal(state.timeTotals, nameToUpdate, duration * -1).sort((a, b) => b.value - a.value)
             }
 
         default:

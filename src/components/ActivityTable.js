@@ -8,7 +8,15 @@ export default function ActivityTable() {
       <div id='tableContainer'>
         <table className="table table-bordered table-sm">
           <thead className='table-dark'>
-            <tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th></th></tr>
+            <tr>
+                <th>Date</th>
+                <th>Activity</th>
+                <th>Duration</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Comments</th>
+                <th></th>
+            </tr>
           </thead>
           <tbody>
             {activities && activities.map((record, index) => (
