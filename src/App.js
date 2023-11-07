@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import ActivityDetails from './components/ActivityDetails';
 import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend } from 'recharts';
 import { useActivitiesContext } from './hooks/useActivitiesContext';
 import ActivityForm from './components/ActivityForm';
+import ActivityTable from './components/ActivityTable';
 
 function App() {
   // Hooks
-  const { activities, timeTotals, dispatch } = useActivitiesContext();
+  const { timeTotals, dispatch } = useActivitiesContext();
 
   // On page load
   useEffect(() => {
@@ -38,18 +38,7 @@ function App() {
     <div id="outer">
       <ActivityForm />
       <br />
-      <div id='tableContainer'>
-        <table className="table table-bordered table-sm">
-          <thead className='table-dark'>
-            <tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th></th></tr>
-          </thead>
-          <tbody>
-            {activities && activities.map((record, index) => (
-              <ActivityDetails key={index} record={record} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ActivityTable />
       <div className='pie'>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart
