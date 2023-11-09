@@ -140,7 +140,10 @@ function ActivityForm() {
                 }
                 } />
                 <br/>
-                <label>Comments: <input type='text' maxLength={20} value={formValues.comments} onChange={(e) => setFormValues({...formValues, comments: e.target.value })}/></label>
+                <label>Comments: 
+                    <br/>
+                    <input type='text' maxLength={20} value={formValues.comments} onChange={(e) => setFormValues({...formValues, comments: e.target.value })}/>
+                </label>
             </div>
             <button className='btn btn-primary' type="submit" disabled={!(formValues.activityName && formValues.startHour && formValues.startMin && formValues.endHour && formValues.endMin)}>Add activity</button>
         </form>
