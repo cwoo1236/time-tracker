@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 // GET all activities
 const getActivities = async (req, res) => {
-    const activities = await Activity.find({}).sort({createdAt: -1});
+    const activities = await Activity.find({}).sort({createdAt: 1});
 
     res.status(200).json(activities);
 }
