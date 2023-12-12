@@ -3,7 +3,7 @@ import { ResponsiveContainer, XAxis, YAxis, BarChart, Bar, PieChart, Pie, Legend
 import { useActivitiesContext } from './hooks/useActivitiesContext';
 import ActivityForm from './components/ActivityForm';
 import ActivityTable from './components/ActivityTable';
-import DiscordButton from './components/DiscordButton';
+import EmailInputAndButton from './components/EmailInputAndButton';
 
 function App() {
   // Hooks
@@ -38,6 +38,7 @@ function App() {
   return (
     <div id="outer">
       <ActivityForm />
+      <EmailInputAndButton />
       <br />
       <ActivityTable />
       <div className='pie'>

@@ -9,7 +9,8 @@ const {
     updateTimeTotal,
     getTimeTotals,
     createTimeTotal,
-    deleteTimeTotal
+    deleteTimeTotal,
+    sendEmail
 } = require('../controllers/controllers');
 const router = express.Router();
 
@@ -32,5 +33,7 @@ router.get('/timeTotals/', getTimeTotals);
 router.post('/timeTotals/', createTimeTotal);
 
 router.delete('/timeTotals/:id', deleteTimeTotal);
+
+router.get('/email/:addr', sendEmail);
 
 module.exports = router;

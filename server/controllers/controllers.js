@@ -2,6 +2,7 @@ const Activity = require('../models/activityModel');
 const timeTotalModel = require('../models/timeTotalModel');
 const TimeTotal = require('../models/timeTotalModel');
 const mongoose = require('mongoose');
+const sgMail = require("@sendgrid/mail");
 
 // GET all activities
 const getActivities = async (req, res) => {
@@ -129,6 +130,26 @@ const deleteTimeTotal = async (req, res) => {
     res.status(200).json(timeTotal);
 }
 
+const sendEmail = async (req, res) => {
+    let addr = req.params.addr;     
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+        to: addr, // Change to your recipient
+        from: 'cwoo1236@terpmail.umd.edu', // Change to your verified sender
+        subject: 'Sending with SendGrid is Fun',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      };
+      sgMail
+        .send(msg)
+        .then(() => {
+          console.log('Email sent')
+        })
+        .catch((error) => {
+          console.error(error)
+        });
+}
+
 module.exports = {
     getActivities,
     getActivity,
@@ -139,5 +160,6 @@ module.exports = {
     updateTimeTotal,
     getTimeTotals,
     createTimeTotal,
-    deleteTimeTotal
+    deleteTimeTotal,
+    sendEmail
 }
