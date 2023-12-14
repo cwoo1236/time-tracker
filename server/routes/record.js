@@ -34,6 +34,6 @@ router.post('/timeTotals/', createTimeTotal);
 
 router.delete('/timeTotals/:id', deleteTimeTotal);
 
-router.get('/email/:addr', sendEmail);
+router.post('/email/:addr', sendEmail);
 
 module.exports = router;

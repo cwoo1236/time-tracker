@@ -131,14 +131,28 @@ const deleteTimeTotal = async (req, res) => {
 }
 
 const sendEmail = async (req, res) => {
-    let addr = req.params.addr;     
+    let addr = req.params.addr;  
+    let activities = req.body;
+    let html = "<table border='1'><thead>";
+    html += "<tr><th>Date</th><th>Activity</th><th>Duration</th><th>Start Time</th><th>End Time</th><th>Comments</th></tr>";
+    html += "</thead><tbody>";
+    activities.forEach(record => {
+        const theDate = new Date(record.activityDate);
+        html += `<tr><td>${theDate.getMonth() + 1}/${theDate.getDate()}</td>`;
+        html += `<td>${record.activityName}</td>`;
+        html += `<td>${record.duration}</td>`
+        html += `<td>${record.startHour}:${record.startMin}</td>`;
+        html += `<td>${record.endHour}:${record.endMin}</td>`;
+        html += `<td>${record.comments}</td>`;
+        html += `</tr>`;
+    });
+    html += "</tbody></table>";
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
-        to: addr, // Change to your recipient
-        from: 'cwoo1236@terpmail.umd.edu', // Change to your verified sender
-        subject: 'Sending with SendGrid is Fun',
-        text: 'and easy to do anywhere, even with Node.js',
-        html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+        to: addr,
+        from: 'cwoo1236@terpmail.umd.edu',
+        subject: 'Time Tracker Data',
+        html: html,
       };
       sgMail
         .send(msg)
@@ -148,6 +162,7 @@ const sendEmail = async (req, res) => {
         .catch((error) => {
           console.error(error)
         });
+    res.status(200);
 }
 
 module.exports = {

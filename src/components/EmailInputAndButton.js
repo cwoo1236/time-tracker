@@ -3,12 +3,17 @@ import { useState } from "react";
 
 export default function EmailInputAndButton() {
     const [ email, setEmail ] = useState("");
+    const { activities } = useActivitiesContext();
 
     const handleClick = async () => {
         if (window.confirm(`Are you sure you want to send an email to ${email}?`)) {
             const res = await fetch(`/api/email/${email}`, 
             {
-                method: "GET",
+                method: "POST",
+                body: JSON.stringify(activities),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             const json = await res.json();
             console.log(json);

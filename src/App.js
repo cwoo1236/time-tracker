@@ -11,6 +11,7 @@ function App() {
 
   // On page load
   useEffect(() => {
+    document.title = "Time Tracker";
     const fetchData = async () => {
       const activitiesRes = await fetch('/api/activities');
       let activitiesJson = await activitiesRes.json();
